@@ -1,4 +1,4 @@
-package com.sparta.todoparty;
+package com.sparta.todoparty.user;
 
 
 import jakarta.persistence.*;

@@ -4,7 +4,7 @@ package com.sparta.todoparty.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.todoparty.jwt.JwtAuthenticationFilter;
 import com.sparta.todoparty.jwt.JwtUtil;
-import com.sparta.todoparty.user.UserService;
+import com.sparta.todoparty.user.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final UserService userService;
     private final ObjectMapper objectMapper;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil,objectMapper,userService);
+        return new JwtAuthenticationFilter(jwtUtil,objectMapper,userDetailsService);
     }
 
     @Bean

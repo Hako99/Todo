@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.todoparty.CommonResponseDto;
-import com.sparta.todoparty.user.UserService;
+import com.sparta.todoparty.user.UserDetailsService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
-    private final UserService userService;
+    private final UserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 토큰 뽑아오기
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String username = info.getSubject();
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 // 보안 관련된 컨텍스트 홀더를 들고있음
-                UserDetails userDetails = userService.getUserDetails(username);
+                UserDetails userDetails = userDetailsService.getUserDetails(username);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null);
                 // -> securityContext 에 담고
                 context.setAuthentication(authentication);

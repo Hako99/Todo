@@ -44,7 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 // 보안 관련된 컨텍스트 홀더를 들고있음
                 UserDetails userDetails = userDetailsService.getUserDetails(username);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                // 3번째 값으로 Authorities 값을 넣어줘야 정상적으로 인증이 완료 되었다고 뒤에 username password 필터에서 인식하도록 되어있음
                 // -> securityContext 에 담고
                 context.setAuthentication(authentication);
                 // -> SecurityContextHolder 에 담고
@@ -58,6 +59,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.setContentType("application/json; charset=UTF-8");
                 response.getWriter().write(objectMapper.writeValueAsString(commonResponseDto));
                 // write 타입은 스트링 이므로 ,objectMapper 를 통해 맵핑 해서 String 으로변환
+                return;
+                // 더 필터를 타지 않고 에러응답을 리턴시킴
             }
         }
 

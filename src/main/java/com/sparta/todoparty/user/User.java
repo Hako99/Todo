@@ -1,12 +1,11 @@
 package com.sparta.todoparty.user;
 
 
-import com.sparta.todoparty.todo.Todo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,5 +26,14 @@ public class User {
     public User (String username,String password){
         this.username = username;
         this.password = password;
+    }
+
+    public void userUpdate(UserRequestDto userRequestDto, PasswordEncoder passwordEncoder) {
+        if (userRequestDto.getPassword() != null) {
+            this.password = passwordEncoder.encode(userRequestDto.getPassword());
+        }
+        if (userRequestDto.getUsername() != null) {
+            this.username = userRequestDto.getUsername();
+        }
     }
 }

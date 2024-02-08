@@ -1,6 +1,8 @@
 package com.sparta.todoparty.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserDetailsService userDetailsService;
 
     public void signup(UserRequestDto userRequestDto){
         String username = userRequestDto.getUsername();
@@ -36,5 +39,17 @@ public class UserService {
                     // 암호화 안된게 앞, 된게 뒤에 들어가야함.
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
+    }
+
+    public void userUpdate(UserRequestDto userRequestDto,Long userId) {
+        if(userId == null ){
+            throw new IllegalArgumentException("로그인 유저 정보가 없음");
+        }
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(()->new RuntimeException("로그인 유저 정보가 없음"));
+
+        user.userUpdate(userRequestDto,passwordEncoder);
+        userRepository.save(user);
     }
 }

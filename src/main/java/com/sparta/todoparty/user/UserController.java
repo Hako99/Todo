@@ -50,7 +50,10 @@ public class UserController {
     //회원수정
     @PutMapping("/userupdate")
     public ResponseEntity<CommonResponseDto> userUpdate(@RequestBody UserRequestDto userRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.userUpdate(userRequestDto,userDetails.getUser().getId());
+        try {userService.userUpdate(userRequestDto,userDetails.getUser());
+        }catch (IllegalArgumentException e ){
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(),HttpStatus.BAD_REQUEST.value()));
+        }
         return ResponseEntity.ok().body(new CommonResponseDto("회원정보 수정 성공",HttpStatus.OK.value()));
     }
 

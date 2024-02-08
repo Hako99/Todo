@@ -1,5 +1,6 @@
 package com.sparta.todoparty.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }
-
+    @Transactional
     public void userUpdate(UserRequestDto userRequestDto,Long userId) {
         if(userId == null ){
             throw new IllegalArgumentException("로그인 유저 정보가 없음");

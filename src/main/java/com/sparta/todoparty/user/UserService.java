@@ -43,18 +43,16 @@ public class UserService {
     }
     @Transactional
     public void userUpdate(UserRequestDto userRequestDto,User user) {
-        if(user.getId() == null ){
-            throw new IllegalArgumentException("로그인 유저 정보가 없음");
-        }
-        if(userRepository.findByUsername(user.getUsername()).isPresent()){
+
+        if(userRepository.findByUsername(userRequestDto.getUsername()).isPresent()){
             throw new IllegalArgumentException("이미 존재하는 유저 입니다.");
         }
 
-        User userRepo = userRepository
+        User userUp = userRepository
                 .findById(user.getId())
                 .orElseThrow(()->new RuntimeException("로그인 유저 정보가 없음"));
 
-        user.userUpdate(userRequestDto,passwordEncoder);
-        userRepository.save(userRepo);
+        userUp.userUpdate(userRequestDto,passwordEncoder);
+        userRepository.save(userUp);
     }
 }

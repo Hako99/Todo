@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RejectedExecutionException;
 
 @RestController
 @RequestMapping("/api/todos")
@@ -24,7 +25,7 @@ public class TodoController {
     // 작성하기
     @PostMapping
     public ResponseEntity<TodoResponseDto> postTodo(@RequestBody TodoRequestDto todoRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        TodoResponseDto responseDto = todoService.createPost(todoRequestDto, userDetails.getUser());
+        TodoResponseDto responseDto = todoService.createTodo(todoRequestDto, userDetails.getUser());
         return ResponseEntity.status(201).body(responseDto);
     }
 
@@ -51,4 +52,19 @@ public class TodoController {
         return ResponseEntity.ok().body(response);
     }
 
+
+    //put 은 전체 수정할때 많이 쓰고
+    // 패치는 일부 수정시에 많이 쓰임
+    // 일단 put으로
+    @PutMapping("/{todoid}")
+    public ResponseEntity<CommonResponseDto> putTodo(@PathVariable Long todoid,@RequestBody TodoRequestDto todoRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        try{
+            TodoResponseDto responseDto = todoService.updateTodo(todoid,todoRequestDto, userDetails.getUser());
+            return ResponseEntity.ok().body(responseDto);
+        }catch (RejectedExecutionException | IllegalArgumentException ex){
+            return ResponseEntity.badRequest().body(new CommonResponseDto(ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
+        }
+
+
+    }
 }

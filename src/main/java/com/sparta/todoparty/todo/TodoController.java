@@ -33,7 +33,7 @@ public class TodoController {
     @GetMapping("/{todoid}")
     public ResponseEntity<CommonResponseDto> getTodo(@PathVariable Long todoId){
         try {
-            TodoResponseDto responseDto = todoService.getTodo(todoId);
+            TodoResponseDto responseDto = todoService.getTodoDto(todoId);
             return ResponseEntity.ok().body(responseDto);
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(),HttpStatus.BAD_REQUEST.value()));

@@ -1,8 +1,11 @@
 package com.sparta.todoparty.todo;
 
+import com.fasterxml.jackson.core.JsonToken;
 import com.sparta.todoparty.comment.Comment;
 import com.sparta.todoparty.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +14,9 @@ import java.util.List;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +48,8 @@ public class Todo {
         this.createDate = LocalDateTime.now();
         this.isCompleted = false;
     }
+
+
 
     //연관관계 메서드
     public void setUser(User user){
